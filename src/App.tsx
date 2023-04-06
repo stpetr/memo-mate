@@ -1,16 +1,20 @@
+import { useMemo } from 'react'
 import { Route, Routes} from 'react-router-dom'
 
 import { Container } from 'react-bootstrap'
-
 import { v4 as uuidV4 } from 'uuid'
 
+import { useLocalStorage } from 'hooks/useLocalStorage'
+
+import { Home } from 'pages/home'
 import { NewNote } from 'pages/new-note'
+import { EditNote } from 'pages/edit-note'
+import { ViewNote } from 'pages/view-note'
+import { NoteLayout } from 'components/note/note-layout'
+
+import { NoteData, RawNote, Tag } from 'types'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Home } from 'pages/home'
-import { useMemo } from 'react'
-import { NoteData, RawNote, Tag } from './types'
-import { useLocalStorage } from './hooks/useLocalStorage'
 
 function App() {
   const [notes, setNotes] = useLocalStorage<RawNote[]>('NOTES', [])
@@ -38,6 +42,27 @@ function App() {
     })
   }
 
+  const handleUpdateNote = (id: string, { tags, ...data}: NoteData) => {
+    setNotes((prevState) => {
+      return prevState.map((note) => {
+        if (note.id === id) {
+          return {
+            ...note,
+            ...data,
+            tagsIds: tags.map((tag) => tag.id)
+          }
+        }
+        return note
+      })
+    })
+  }
+
+  const handleDeleteNote = (id: string) => {
+    setNotes((prevState) => {
+      return prevState.filter((note) => note.id !== id)
+    })
+  }
+
   const handleAddTag = (tag: Tag) => {
     setTags((prevState) => [...prevState, tag])
   }
@@ -45,20 +70,38 @@ function App() {
   return (
     <Container className="my-4">
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={<Home notes={notesWithTags} availableTags={tags} />}
+        />
         <Route
           path="/new"
-          element={(
+          element={
             <NewNote
               onSubmit={handleCreateNote}
               onAddTag={handleAddTag}
               availableTags={tags}
             />
-          )}
+          }
         />
-        <Route path="/:id">
-          <Route index element={<h1>Show</h1>} />
-          <Route path="edit" element={<h1>Edit</h1>} />
+        <Route
+          path="/:id"
+          element={<NoteLayout notes={notesWithTags} />}
+        >
+          <Route
+            index
+            element={<ViewNote onDelete={handleDeleteNote} />}
+          />
+          <Route
+            path="edit"
+            element={
+              <EditNote
+                onSubmit={handleUpdateNote}
+                onAddTag={handleAddTag}
+                availableTags={tags}
+              />
+            }
+          />
         </Route>
         <Route path="*" element={<h1>404</h1>} />
       </Routes>

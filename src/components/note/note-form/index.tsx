@@ -1,23 +1,23 @@
 import { FormEvent, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { v4 as uuidV4 } from 'uuid'
-
-import { Button, Col, Form, Row, Stack } from 'react-bootstrap'
 import CreatableSelect from 'react-select/creatable'
+import { Button, Col, Form, Row, Stack } from 'react-bootstrap'
 
 import { NoteData, Tag } from 'types'
-import { useNavigate } from 'react-router-dom'
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void
   onAddTag: (tag: Tag) => void
   availableTags: Tag[]
+  noteData?: NoteData
 }
 
-export const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) => {
+export const NoteForm = ({ onSubmit, onAddTag, availableTags, noteData }: NoteFormProps) => {
   const titleRef = useRef<HTMLInputElement>(null)
   const markdownRef = useRef<HTMLTextAreaElement>(null)
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([])
+  const [selectedTags, setSelectedTags] = useState<Tag[]>(noteData?.tags || [])
   const navigate = useNavigate()
 
   const handleSubmit = (e: FormEvent) => {
@@ -46,7 +46,7 @@ export const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) =
           <Col>
             <Form.Group controlId="title">
               <Form.Label>Title</Form.Label>
-              <Form.Control ref={titleRef} required />
+              <Form.Control ref={titleRef} defaultValue={noteData?.title || ''} required />
             </Form.Group>
           </Col>
           <Col>
@@ -64,7 +64,13 @@ export const NoteForm = ({ onSubmit, onAddTag, availableTags }: NoteFormProps) =
         </Row>
         <Form.Group controlId="markdown">
           <Form.Label>Body</Form.Label>
-          <Form.Control ref={markdownRef} required as="textarea" rows={15} />
+          <Form.Control
+            ref={markdownRef}
+            required
+            defaultValue={noteData?.markdown || ''}
+            as="textarea"
+            rows={15}
+          />
         </Form.Group>
         <Stack direction="horizontal" gap={2} className="justify-content-end">
           <Button type="submit" variant="primary">Save</Button>
