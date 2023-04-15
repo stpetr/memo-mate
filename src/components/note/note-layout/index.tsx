@@ -1,13 +1,10 @@
 import { Navigate, Outlet, useParams } from 'react-router-dom'
 
-import { Note } from 'types'
+import { useNotesStore } from 'store/useNotesStore'
 
-type NoteLayoutProps = {
-  notes: Note[]
-}
-
-export const NoteLayout = ({ notes }: NoteLayoutProps) => {
+export const NoteLayout = () => {
   const { id } = useParams()
+  const { notes } = useNotesStore()
 
   const note = notes.find((el) => el.id === id)
 

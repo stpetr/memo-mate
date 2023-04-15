@@ -1,22 +1,22 @@
 import { FormEvent, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { v4 as uuidV4 } from 'uuid'
 import CreatableSelect from 'react-select/creatable'
 import { Button, Col, Form, Row, Stack } from 'react-bootstrap'
+
+import { useTagsStore } from 'store/useTagsStore'
 
 import { NoteData, Tag } from 'types'
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void
-  onAddTag: (tag: Tag) => void
-  availableTags: Tag[]
   noteData?: NoteData
 }
 
-export const NoteForm = ({ onSubmit, onAddTag, availableTags, noteData }: NoteFormProps) => {
+export const NoteForm = ({ onSubmit, noteData }: NoteFormProps) => {
   const titleRef = useRef<HTMLInputElement>(null)
   const markdownRef = useRef<HTMLTextAreaElement>(null)
+  const { tags, createTag } = useTagsStore()
   const [selectedTags, setSelectedTags] = useState<Tag[]>(noteData?.tags || [])
   const navigate = useNavigate()
 
@@ -30,13 +30,9 @@ export const NoteForm = ({ onSubmit, onAddTag, availableTags, noteData }: NoteFo
     navigate('..')
   }
 
-  const handleCreateTag = (label: string) => {
-    const newTag = {
-      id: uuidV4(),
-      label,
-    }
-    onAddTag(newTag)
-    setSelectedTags((prevState) => [...prevState, newTag])
+  const handleCreateTag = async (name: string) => {
+    const tag = await createTag({ name })
+    setSelectedTags((prevState) => [...prevState, tag])
   }
 
   return (
@@ -53,9 +49,9 @@ export const NoteForm = ({ onSubmit, onAddTag, availableTags, noteData }: NoteFo
             <Form.Group controlId="tags">
               <Form.Label>Tags</Form.Label>
               <CreatableSelect
-                options={availableTags.map(({id, label}) => ({ label, value: id }))}
-                value={selectedTags.map(({id, label}) => ({ label, value: id }))}
-                onChange={(tags) => setSelectedTags(tags.map(({ label, value }) => ({label, id: value})))}
+                options={tags.map(({id, name}) => ({ label: name, value: id }))}
+                value={selectedTags.map(({id, name}) => ({ label: name, value: id }))}
+                onChange={(tags) => setSelectedTags(tags.map(({ label: name, value }) => ({name, id: value})))}
                 onCreateOption={handleCreateTag}
                 isMulti
               />

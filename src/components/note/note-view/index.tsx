@@ -3,18 +3,21 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Badge, Button, Col, Row, Stack } from 'react-bootstrap'
 import ReactMarkdown from 'react-markdown'
 
+import { useNotesStore } from 'store/useNotesStore'
+
 import { Note } from 'types'
 
 type NoteViewProps = {
   note: Note
-  onDelete: (id: string) => void
 }
 
-export const NoteView = ({ note, onDelete }: NoteViewProps) => {
+export const NoteView = ({ note }: NoteViewProps) => {
   const navigate = useNavigate()
+  const { deleteNote } = useNotesStore()
+
 
   const handleDelete = () => {
-    onDelete(note.id)
+    deleteNote(note.id)
     navigate('/')
   }
 
@@ -31,7 +34,7 @@ export const NoteView = ({ note, onDelete }: NoteViewProps) => {
             >
               {note.tags.map((tag) => (
                 <Badge key={tag.id} className="text-truncate">
-                  {tag.label}
+                  {tag.name}
                 </Badge>
               ))}
             </Stack>

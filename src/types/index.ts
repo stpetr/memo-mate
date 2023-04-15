@@ -1,9 +1,14 @@
-export type Tag = {
-  id: string
-  label: string
+export type TagData = {
+  id?: string
+  name: string
 }
 
+export type Tag = {
+  id: string
+} & TagData
+
 export type NoteData = {
+  id?: string
   title: string
   markdown: string
   tags: Tag[]

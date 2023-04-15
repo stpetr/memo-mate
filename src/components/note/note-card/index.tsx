@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+
 import { Badge, Card, Stack } from 'react-bootstrap'
 
 import { Note } from 'types'
@@ -27,7 +28,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
             >
               {note.tags.map((tag) => (
                 <Badge key={tag.id} className="text-truncate">
-                  {tag.label}
+                  {tag.name}
                 </Badge>
               ))}
             </Stack>

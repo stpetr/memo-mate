@@ -4,16 +4,15 @@ import { Link } from 'react-router-dom'
 import { Button, Col, Form, Row, Stack } from 'react-bootstrap'
 import ReactSelect from 'react-select'
 
+import { useNotesStore } from 'store/useNotesStore'
+import { useTagsStore } from 'store/useTagsStore'
 import { NoteCard } from 'components/note/note-card'
 
-import { Note, Tag } from 'types'
+import { Tag } from 'types'
 
-type NoteListProps = {
-  notes: Note[]
-  availableTags: Tag[]
-}
-
-export const  NoteList = ({ notes, availableTags }: NoteListProps) => {
+export const  NoteList = () => {
+  const { notes } = useNotesStore()
+  const { tags } = useTagsStore()
   const [selectedTags, setSelectedTags] = useState<Tag[]>([])
   const [title, setTitle] = useState('')
 
@@ -58,9 +57,9 @@ export const  NoteList = ({ notes, availableTags }: NoteListProps) => {
             <Form.Group controlId="tags">
               <Form.Label>Tags</Form.Label>
               <ReactSelect
-                options={availableTags.map(({id, label}) => ({ label, value: id }))}
-                value={selectedTags.map(({id, label}) => ({ label, value: id }))}
-                onChange={(tags) => setSelectedTags(tags.map(({ label, value }) => ({label, id: value})))}
+                options={tags.map(({id, name}) => ({ label: name, value: id }))}
+                value={selectedTags.map(({id, name}) => ({ label: name, value: id }))}
+                onChange={(tags) => setSelectedTags(tags.map(({ label: name, value }) => ({name, id: value})))}
                 isMulti
               />
             </Form.Group>

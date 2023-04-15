@@ -1,25 +1,22 @@
 import { useNote } from 'hooks/useNote'
-
+import { useNotesStore } from 'store/useNotesStore'
 import { NoteForm } from 'components/note/note-form'
 
-import { NoteData, Tag } from 'types'
+import { NoteData } from 'types'
 
-type EditNoteProps = {
-  onSubmit: (id: string, data: NoteData) => void
-  onAddTag: (tag: Tag) => void
-  availableTags: Tag[]
-}
-
-export const EditNote = ({ onSubmit, onAddTag, availableTags }: EditNoteProps) => {
+export const EditNote = () => {
   const note = useNote()
+  const { updateNote } = useNotesStore()
+
+  const onSubmit = (id: string, data: NoteData) => {
+    updateNote(id, data)
+  }
 
   return (
     <div>
       <h1>Edit Note</h1>
       <NoteForm
         onSubmit={(data) => onSubmit(note.id, data)}
-        onAddTag={onAddTag}
-        availableTags={availableTags}
         noteData={note}
       />
     </div>
