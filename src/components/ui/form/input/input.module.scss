@@ -1,0 +1,24 @@
+@use "theme/helpers" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: rem(2);
+}
+
+.input {
+  display: block;
+  width: 100%;
+  height: rem(40);
+  padding: 0 rem(8);
+  border-radius: rem(4);
+  border: none;
+}
+
+.label {
+
+}
+
+.error {
+  color: indianred;
+}
