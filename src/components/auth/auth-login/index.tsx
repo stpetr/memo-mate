@@ -4,6 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useAuthStore } from 'store/useAuthStore'
 
+import { Input } from 'components/ui/form/input'
+
 import styles from './auth-login.module.scss'
 
 const schema = z.object({
@@ -60,22 +62,22 @@ export const AuthLogin = () => {
     <div className={styles.authLogin}>
       <form className={styles.authForm} onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <input
-            {...register('email')}
-            className={styles.formInput}
-            type="email"
+          <Input
+            register={() => register('email')}
             placeholder="Email"
+            error={errors.email?.message}
+            errorClassName={styles.formInputError}
           />
-          {errors.email && <div className={styles.formInputError}>{errors.email.message}</div>}
         </div>
+
         <div>
-          <input
-            {...register('password')}
-            className={styles.formInput}
+          <Input
+            register={() => register('password')}
             type="password"
             placeholder="Password"
+            error={errors.password?.message}
+            errorClassName={styles.formInputError}
           />
-          {errors.password && <div className={styles.formInputError}>{errors.password.message}</div>}
         </div>
         <button className={styles.formSubmitBtn}>{isSubmitting ? 'Loading...' : 'Submit'}</button>
         {errors.root && <div className={styles.formInputError}>{errors.root.message}</div>}
