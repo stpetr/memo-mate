@@ -28,3 +28,24 @@ export type RawNoteData = {
 export type RawNote = {
   id: string
 } & RawNoteData
+
+export type LoginFormData = {
+  email: string
+  password: string
+}
+
+export type LoginResponseData = {
+  code: number
+}
+
+export type RegisterFormData = {
+  email: string
+  password: string
+  repeatPassword: string
+}
+
+export type User = {
+  // id: string
+  email: string
+  name?: string
+}

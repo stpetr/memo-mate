@@ -14,7 +14,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
   return (
     <Card
       as={Link}
-      to={`${note.id}`}
+      to={`/notes/${note.id}`}
       className={`h-100 text-reset text-decoration-none ${styles.card}`}
     >
       <Card.Body>

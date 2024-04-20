@@ -1,9 +1,10 @@
-import axios from 'axios'
 import create from 'zustand'
+import { devtools } from 'zustand/middleware'
+
+import api from 'services/api'
 
 import { Note, NoteData } from 'types'
-
-import { API_URL } from './constants'
+import { StateCreatorWithDevtools } from 'store/types'
 
 interface NotesStore {
   notes: Note[]
@@ -13,28 +14,31 @@ interface NotesStore {
   deleteNote: (id: string) => void
 }
 
-export const useNotesStore = create<NotesStore>((set, get) => {
+const createNotesStore: StateCreatorWithDevtools<NotesStore> = (set) => {
   return {
     notes: [],
     fetchNotes: async () => {
-      const res = await axios.get(`${API_URL}/notes`)
-      if (res.data) {
-        set({ notes: res.data })
-      } else {
-        console.error('Failed fetching notes')
+      try {
+        const res = await api.get(`/notes`)
+        set({ notes: res.data }, false, 'fetchNotes')
+      } catch (error) {
+        console.error('Failed fetching notes', error)
       }
     },
     createNote: async (data) => {
-      const res = await axios.post(`${API_URL}/notes`, data)
-      if (res.data) {
+      try {
+        const res = await api.post(`/notes`, data)
         set((prevState) => ({
           notes: [...prevState.notes, res.data],
-        }))
+        }), false, 'createNote')
+
+      } catch(error) {
+        console.error('Could not create note', error)
       }
     },
     updateNote: async (id, data) => {
-      const res = await axios.patch(`${API_URL}/notes/${id}`, data)
-      if (res.data) {
+      try {
+        const res = await api.patch(`/notes/${id}`, data)
         set((prevState) => ({
           notes: prevState.notes.map((el) => {
             if (el.id === res.data.id) {
@@ -42,17 +46,27 @@ export const useNotesStore = create<NotesStore>((set, get) => {
             }
             return el
           })
-        }))
+        }), false, 'updateNote')
+      } catch (error) {
+        console.error('Could not update note', error)
       }
     },
     deleteNote: async (id) => {
-      const res = await axios.delete(`${API_URL}/notes/${id}`)
-      if (res.data) {
+      try {
+        const res = await api.delete(`/notes/${id}`)
         set((prevState) => ({
           notes: prevState.notes.filter((el) => el.id !== res.data.id)
-        }))
+        }), false, 'deleteNote')
+      } catch (error) {
+        console.error('Could not delete note', error)
       }
-      console.log('delete note res', res)
     }
   }
-})
+}
+
+export const useNotesStore = create<NotesStore>()(
+  devtools(
+    createNotesStore,
+    { name: 'Notes', enabled: true }
+  )
+)

@@ -15,11 +15,18 @@ export default ({ mode }) => {
         hooks: '/src/hooks',
         assets: '/src/assets',
         types: '/src/types',
+        utils: '/src/utils',
+        services: '/src/services',
       }
     },
     server: {
       port: parseInt(env.VITE_SERVER_PORT) || DEFAULT_SERVER_PORT,
       strictPort: true,
-    }
+    },
+    css: {
+      modules: {
+        localsConvention: 'camelCaseOnly',
+      },
+    },
   })
 }

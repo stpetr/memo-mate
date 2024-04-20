@@ -15,10 +15,9 @@ export const NoteView = ({ note }: NoteViewProps) => {
   const navigate = useNavigate()
   const { deleteNote } = useNotesStore()
 
-
-  const handleDelete = () => {
-    deleteNote(note.id)
-    navigate('/')
+  const handleDelete = async () => {
+    await deleteNote(note.id)
+    navigate('/notes')
   }
 
   return (
@@ -42,7 +41,7 @@ export const NoteView = ({ note }: NoteViewProps) => {
         </Col>
         <Col xs="auto">
           <Stack direction="horizontal" gap={2}>
-            <Link to={`/${note.id}/edit`}>
+            <Link to={`/notes/${note.id}/edit`}>
               <Button variant="primary">Edit</Button>
             </Link>
             <Button variant="outline-danger" onClick={handleDelete}>Delete</Button>
