@@ -24,6 +24,7 @@
       "store/*": ["store/*"],
       "hooks": ["hooks/*"],
       "utils": ["utils/*"],
+      "theme": ["theme/*"]
     }
   },
   "include": ["src/**/*"],

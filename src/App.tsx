@@ -10,6 +10,7 @@ import { useAuthStore } from 'store/useAuthStore'
 import { AppRouter } from './routers/app-router'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'theme/app.scss'
 
 function App() {
   const { isAuthenticated, isMounted, fetchProfile } = useAuthStore()

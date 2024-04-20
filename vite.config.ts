@@ -17,6 +17,7 @@ export default ({ mode }) => {
         types: '/src/types',
         utils: '/src/utils',
         services: '/src/services',
+        theme: '/src/theme',
       }
     },
     server: {

@@ -1,0 +1,21 @@
+@use 'sass:math';
+
+$baseFontSize: 16px;
+
+@function strip-units($pxVal) {
+  @return math.div($pxVal, $pxVal * 0 + 1);
+}
+
+@function rem($pxVal) {
+  $base: $baseFontSize;
+
+  @if not unitless($pxVal) {
+    $pxVal: strip-units($pxVal);
+  }
+
+  @if not unitless($base) {
+    $base: strip-units($base);
+  }
+
+  @return math.div($pxVal, $base) * 1rem;
+}
