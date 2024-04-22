@@ -1,0 +1,15 @@
+@use 'theme/helpers' as *;
+
+.button {
+  padding: rem(4) rem(8);
+  background: none;
+  border: 1px solid $lightGray;
+  border-radius: rem(4);
+  transition: all 0.2s;
+
+  &:hover {
+    color: white;
+    background-color: $primary;
+    border-color: $primary;
+  }
+}
