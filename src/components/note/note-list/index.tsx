@@ -61,7 +61,7 @@ export const  NoteList = () => {
 
       <div className={styles.cards}>
         {filteredNotes.map((note) => (
-          <NoteCard note={note} />
+          <NoteCard key={note.id} note={note} />
         ))}
       </div>
     </div>
