@@ -1,4 +1,4 @@
-import { FC, InputHTMLAttributes } from 'react'
+import { FC, InputHTMLAttributes, useId } from 'react'
 
 import { UseFormRegisterReturn } from 'react-hook-form'
 
@@ -28,13 +28,15 @@ export const Input: FC<InputProps> = (props) => {
     ...rest
   } = props
 
+  const id = rest.id ?? useId()
 
   return (
     <div className={cn(styles.container, className)}>
       {label && (
-        <label className={cn(styles.label, labelClassName)}>{label}</label>
+        <label className={cn(styles.label, labelClassName)} htmlFor={id}>{label}</label>
       )}
       <input
+        id={id}
         className={cn(styles.input)}
         {...register?.()}
         {...rest}
