@@ -1,14 +1,18 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Button, Col, Form, Row, Stack } from 'react-bootstrap'
 import ReactSelect from 'react-select'
 
 import { useNotesStore } from 'store/useNotesStore'
 import { useTagsStore } from 'store/useTagsStore'
+
 import { NoteCard } from 'components/note/note-card'
+import { Button } from 'components/ui/button'
+import { Input } from 'components/ui/form/input'
 
 import { Tag } from 'types'
+
+import styles from './note-list.module.scss'
 
 export const  NoteList = () => {
   const { notes } = useNotesStore()
@@ -28,51 +32,38 @@ export const  NoteList = () => {
   }, [notes, title, selectedTags])
 
   return (
-    <>
-      <Row className="align-items-center mb-4">
-        <Col>
-          <h1>My Notes</h1>
-        </Col>
-        <Col xs="auto">
-          <Stack direction="horizontal" gap={2}>
-            <Link to="/notes/new">
-              <Button variant="primary">Create</Button>
-            </Link>
-            <Button variant="outline-secondary">Edit Tags</Button>
-          </Stack>
-        </Col>
-      </Row>
-      <Form>
-        <Row className="mb-4">
-          <Col>
-            <Form.Group controlId="title">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)} />
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group controlId="tags">
-              <Form.Label>Tags</Form.Label>
-              <ReactSelect
-                options={tags.map(({id, name}) => ({ label: name, value: id }))}
-                value={selectedTags.map(({id, name}) => ({ label: name, value: id }))}
-                onChange={(tags) => setSelectedTags(tags.map(({ label: name, value }) => ({name, id: value})))}
-                isMulti
-              />
-            </Form.Group>
-          </Col>
-        </Row>
-      </Form>
-      <Row xs={1} sm={2} lg={3} xl={4} className="g-3">
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.heading}>My Notes</h1>
+        <div className={styles.headerButtons}>
+          <Link to="/notes/new">
+            <Button>Create Note</Button>
+          </Link>
+          <Button>Edit Tags</Button>
+        </div>
+      </div>
+      <div className={styles.filter}>
+        <Input
+          label="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <label>
+          Tags
+          <ReactSelect
+            options={tags.map(({id, name}) => ({ label: name, value: id }))}
+            value={selectedTags.map(({id, name}) => ({ label: name, value: id }))}
+            onChange={(tags) => setSelectedTags(tags.map(({ label: name, value }) => ({name, id: value})))}
+            isMulti
+          />
+        </label>
+      </div>
+
+      <div className={styles.cards}>
         {filteredNotes.map((note) => (
-          <Col key={note.id}>
-            <NoteCard note={note} />
-          </Col>
+          <NoteCard note={note} />
         ))}
-      </Row>
-    </>
+      </div>
+    </div>
   )
 }

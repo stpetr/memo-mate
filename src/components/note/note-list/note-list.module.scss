@@ -1,0 +1,38 @@
+@use 'theme/helpers' as *;
+
+.container {
+  padding: rem(20) 0;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: rem(20);
+
+  .heading {
+    margin: 0;
+    font-size: $fontSize4Xl;
+  }
+
+  .header-buttons {
+    display: flex;
+    gap: rem(10);
+  }
+}
+
+.filter {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: rem(24);
+  margin-bottom: rem(40);
+
+  & > * {
+    flex: 1;
+  }
+}
+
+.cards {
+  @include flexGrid((xs: 1, sm: 2, lg: 3, xl: 4), rem(16));
+}

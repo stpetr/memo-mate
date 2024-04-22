@@ -1,4 +1,16 @@
+@use 'theme/helpers' as *;
+
 .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: rem(10);
+  padding: rem(16);
+  border: 1px solid $lightGray;
+  border-radius: rem(6);
+  text-decoration: none;
+
   transition: translate ease-in-out 100ms, box-shadow ease-in-out 100ms;
 
   &:hover,
@@ -6,4 +18,25 @@
     translate: 0 -5px;
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, .2);
   }
+}
+
+.card-title {
+  font-size: $fontSizeXl;
+  color: black;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: rem(5);
+}
+
+.card-tag {
+  padding: rem(2) rem(8);
+  font-size: $fontSizeXs;
+  font-weight: 600;
+  color: white;
+  background-color: $primary;
+  border-radius: rem(8);
 }
