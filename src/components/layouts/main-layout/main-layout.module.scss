@@ -1,3 +1,5 @@
+@use 'theme/helpers' as *;
+
 .layout {
   display: flex;
   flex-direction: column;
@@ -7,7 +9,7 @@
     display: flex;
     padding: 5px;
     border-bottom: 1px solid;
-    background-color: #9370DB;
+    background-color: $primary;
 
     .profile-nav-wrap {
       position: relative;
@@ -19,7 +21,7 @@
         justify-content: center;
         width: 40px;
         height: 40px;
-        color: #9370DB;
+        color: $primary;
         background: white;
         border: none;
         border-radius: 50%;
