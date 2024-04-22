@@ -1,0 +1,19 @@
+@use 'sass:map';
+@use '../vars/breakpoints' as *;
+
+@mixin flexGrid($columnsMap, $gap) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap;
+
+  @each $breakpointName, $columnsNum in $columnsMap {
+    $breakpoint: map.get($breakpoints, $breakpointName);
+    @if map.get($breakpoints, $breakpointName) {
+      @media (min-width: $breakpoint) {
+        & > * {
+          flex: 0 0 calc((100% - $gap * ($columnsNum - 1)) / $columnsNum);
+        }
+      }
+    }
+  }
+}

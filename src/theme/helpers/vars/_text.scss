@@ -1,0 +1,11 @@
+@use '../mixins/rem' as *;
+
+// Font sizes
+$fontSizeXs: rem(12);
+$fontSizeSm: rem(14);
+$fontSizeBase: rem(16);
+$fontSizeLg: rem(18);
+$fontSizeXl: rem(20);
+$fontSize2Xl: rem(24);
+$fontSize3Xl: rem(30);
+$fontSize4Xl: rem(36);
