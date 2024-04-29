@@ -15,19 +15,11 @@ export type NoteData = {
 }
 
 export type Note = {
-  id: string
-} & NoteData
-
-
-export type RawNoteData = {
+  id?: string
   title: string
   markdown: string
-  tagsIds: string[]
+  tags: Tag[]
 }
-
-export type RawNote = {
-  id: string
-} & RawNoteData
 
 export type LoginFormData = {
   email: string

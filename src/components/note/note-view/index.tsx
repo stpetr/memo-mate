@@ -16,7 +16,9 @@ export const NoteView = ({ note }: NoteViewProps) => {
   const { deleteNote } = useNotesStore()
 
   const handleDelete = async () => {
-    await deleteNote(note.id)
+    if (note.id) {
+      await deleteNote(note.id)
+    }
     navigate('/notes')
   }
 

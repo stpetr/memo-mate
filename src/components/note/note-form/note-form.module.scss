@@ -1,0 +1,45 @@
+@use 'theme/helpers' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: rem(20)
+}
+
+.two-cols {
+  @include flexGrid((xs: 1, md: 2), rem(20));
+}
+
+.body-field {
+  min-height: rem(400);
+}
+
+.action-buttons-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.body-preview {
+  min-height: rem(400);
+  padding: rem(20);
+  background-color: $offWhite;
+  border-radius: rem(4);
+}
+
+.tags-label {
+  margin-bottom: rem(1);
+}
+
+.submit-btn {
+  background-color: $primary;
+  color: white;
+  border-color: $primary;
+
+  &:not(:disabled) {
+    &:hover {
+      background-color: white;
+      color: $primary;
+    }
+  }
+}

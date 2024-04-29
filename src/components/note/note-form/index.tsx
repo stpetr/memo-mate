@@ -1,78 +1,112 @@
-import { FormEvent, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import CreatableSelect from 'react-select/creatable'
-import { Button, Col, Form, Row, Stack } from 'react-bootstrap'
+import { MultiValue } from 'react-select'
+import ReactMarkdown from 'react-markdown'
 
 import { useTagsStore } from 'store/useTagsStore'
 
-import { NoteData, Tag } from 'types'
+import { Input } from 'components/ui/form/input'
+import { Textarea } from 'components/ui/form/textarea'
+import { Button } from 'components/ui/button'
+
+import { noteSchema } from 'entities/note/schema'
+import { NoteFormData } from 'entities/note/types'
+
+import { Note, Tag } from 'types'
+
+import styles from './note-form.module.scss'
 
 type NoteFormProps = {
-  onSubmit: (data: NoteData) => void
-  noteData?: NoteData
+  onSubmit: SubmitHandler<NoteFormData>
+  onCancel?: () => void
+  noteData?: Note
 }
 
-export const NoteForm = ({ onSubmit, noteData }: NoteFormProps) => {
-  const titleRef = useRef<HTMLInputElement>(null)
-  const markdownRef = useRef<HTMLTextAreaElement>(null)
+export const NoteForm = ({ onSubmit, onCancel,  noteData }: NoteFormProps) => {
   const { tags, createTag } = useTagsStore()
   const [selectedTags, setSelectedTags] = useState<Tag[]>(noteData?.tags || [])
-  const navigate = useNavigate()
+  const [bodyPreview, setBodyPreview] = useState(noteData?.markdown ?? '')
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    onSubmit({
-      title: titleRef.current!.value,
-      markdown: markdownRef.current!.value,
-      tags: selectedTags,
-    })
-    navigate('..')
-  }
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: {
+      errors,
+      isSubmitting,
+    },
+  } = useForm<NoteFormData>({
+    defaultValues: {
+      id: noteData?.id ?? '',
+      title: noteData?.title ?? '',
+      markdown: noteData?.markdown ?? '',
+      tags: noteData?.tags ?? [],
+    },
+    resolver: zodResolver(noteSchema),
+  })
+
+  useEffect(() => {
+    setValue('tags', selectedTags, { shouldDirty: true })
+  }, [selectedTags, setValue])
 
   const handleCreateTag = async (name: string) => {
     const tag = await createTag({ name })
     setSelectedTags((prevState) => [...prevState, tag])
   }
 
+  const handleTagsChange = (tags: MultiValue<{ label: string; value: string; }>) => {
+    setSelectedTags(tags.map(({ label: name, value }) => ({name, id: value})))
+  }
+
   return (
-    <Form onSubmit={handleSubmit}>
-      <Stack gap={4}>
-        <Row>
-          <Col>
-            <Form.Group controlId="title">
-              <Form.Label>Title</Form.Label>
-              <Form.Control ref={titleRef} defaultValue={noteData?.title || ''} required />
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group controlId="tags">
-              <Form.Label>Tags</Form.Label>
-              <CreatableSelect
-                options={tags.map(({id, name}) => ({ label: name, value: id }))}
-                value={selectedTags.map(({id, name}) => ({ label: name, value: id }))}
-                onChange={(tags) => setSelectedTags(tags.map(({ label: name, value }) => ({name, id: value})))}
-                onCreateOption={handleCreateTag}
-                isMulti
-              />
-            </Form.Group>
-          </Col>
-        </Row>
-        <Form.Group controlId="markdown">
-          <Form.Label>Body</Form.Label>
-          <Form.Control
-            ref={markdownRef}
-            required
-            defaultValue={noteData?.markdown || ''}
-            as="textarea"
-            rows={15}
+    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+      <div className={styles.twoCols}>
+        <Input
+          register={() => register('title')}
+          label="Title"
+          error={errors.title?.message}
+        />
+
+        <label>
+          <div className={styles.tagsLabel}>Tags</div>
+          <CreatableSelect
+            options={tags.map(({id, name}) => ({ label: name, value: id }))}
+            value={selectedTags.map(({id, name}) => ({ label: name, value: id }))}
+            onChange={handleTagsChange}
+            onCreateOption={handleCreateTag}
+            isMulti
           />
-        </Form.Group>
-        <Stack direction="horizontal" gap={2} className="justify-content-end">
-          <Button type="submit" variant="primary">Save</Button>
-          <Button type="button" variant="outline-secondary" onClick={() => navigate('..')}>Cancel</Button>
-        </Stack>
-      </Stack>
-    </Form>
+          {errors.tags && <div>No tags: {errors.tags.message}</div>}
+        </label>
+      </div>
+
+      <div className={styles.twoCols}>
+        <Textarea
+          register={() => register('markdown', {
+            onChange: (e) => setBodyPreview(e.target.value),
+          })}
+          label="Body"
+          error={errors.markdown?.message}
+          fieldClassName={styles.bodyField}
+        />
+        <div>
+          <span>Preview</span>
+          <ReactMarkdown className={styles.bodyPreview}>{bodyPreview}</ReactMarkdown>
+        </div>
+      </div>
+      <input type="hidden" {...register('id')} />
+
+      <div className={styles.actionButtonsContainer}>
+        <Button className={styles.submitBtn} type="submit" disabled={isSubmitting}>Save</Button>
+        {onCancel && <Button onClick={onCancel} disabled={isSubmitting}>Cancel</Button>}
+      </div>
+
+      {errors.root && <div className={styles.formInputError}>{errors.root.message}</div>}
+      {isSubmitting && <div>Submitting...</div>}
+    </form>
   )
 }

@@ -3,14 +3,15 @@ import { devtools } from 'zustand/middleware'
 
 import api from 'services/api'
 
-import { Note, NoteData } from 'types'
+import { Note } from 'types'
 import { StateCreatorWithDevtools } from 'store/types'
+import { NoteFormData } from 'entities/note/types'
 
 interface NotesStore {
   notes: Note[]
   fetchNotes: () => void
-  createNote: (data: NoteData) => void
-  updateNote: (id: string, data: NoteData) => void
+  createNote: (data: NoteFormData) => Promise<Note | null>
+  updateNote: (data: NoteFormData) => Promise<Note | null>
   deleteNote: (id: string) => void
 }
 
@@ -31,14 +32,15 @@ const createNotesStore: StateCreatorWithDevtools<NotesStore> = (set) => {
         set((prevState) => ({
           notes: [...prevState.notes, res.data],
         }), false, 'createNote')
-
+        return res.data
       } catch(error) {
         console.error('Could not create note', error)
+        return null
       }
     },
-    updateNote: async (id, data) => {
+    updateNote: async (data) => {
       try {
-        const res = await api.patch(`/notes/${id}`, data)
+        const res = await api.patch(`/notes/${data.id}`, data)
         set((prevState) => ({
           notes: prevState.notes.map((el) => {
             if (el.id === res.data.id) {
@@ -47,8 +49,10 @@ const createNotesStore: StateCreatorWithDevtools<NotesStore> = (set) => {
             return el
           })
         }), false, 'updateNote')
+        return res.data
       } catch (error) {
         console.error('Could not update note', error)
+        return null
       }
     },
     deleteNote: async (id) => {
