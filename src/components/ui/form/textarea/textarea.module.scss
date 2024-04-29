@@ -1,0 +1,24 @@
+@use "theme/helpers" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: rem(2);
+}
+
+.field {
+  display: block;
+  width: 100%;
+  padding: rem(4) rem(8);
+  border-radius: rem(4);
+  border: 1px solid $lightGray;
+}
+
+.label {
+
+}
+
+.error {
+  color: indianred;
+}
