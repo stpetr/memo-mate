@@ -20,6 +20,7 @@
       "assets/*": ["assets/*"],
       "components/*": ["components/*"],
       "pages/*": ["pages/*"],
+      "entities/*": ["entities/*"],
       "services/*": ["services/*"],
       "store/*": ["store/*"],
       "hooks": ["hooks/*"],

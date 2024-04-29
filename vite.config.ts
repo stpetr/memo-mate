@@ -14,6 +14,7 @@ export default ({ mode }) => {
         pages: '/src/pages',
         hooks: '/src/hooks',
         assets: '/src/assets',
+        entities: '/src/entities',
         types: '/src/types',
         utils: '/src/utils',
         services: '/src/services',
