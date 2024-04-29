@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react'
+import { ButtonHTMLAttributes, FC, ReactNode } from 'react'
 
 import cn from 'utils/helpers/class-names'
 
@@ -9,14 +9,15 @@ type ButtonProps = {
   onClick?: () => void
   children?: ReactNode
   type?: 'button' | 'submit'
-}
+} & ButtonHTMLAttributes<HTMLButtonElement>
 
 export const Button:FC<ButtonProps> = (props) => {
   const {
     className,
     onClick,
     type = 'button',
-    children
+    children,
+    ...restProps
   } = props
 
   return (
@@ -24,6 +25,7 @@ export const Button:FC<ButtonProps> = (props) => {
       type={type}
       className={cn(styles.button, className)}
       onClick={onClick}
+      {...restProps}
     >{children}</button>
   )
 }
