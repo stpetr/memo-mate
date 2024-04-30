@@ -1,11 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom'
 
-import { Badge, Button, Col, Row, Stack } from 'react-bootstrap'
 import ReactMarkdown from 'react-markdown'
+
+import { Badge as AppBadge } from 'components/ui/badge'
+import { Button as AppButton } from 'components/ui/button'
 
 import { useNotesStore } from 'store/useNotesStore'
 
 import { Note } from 'types'
+
+import styles from './note-view.module.scss'
 
 type NoteViewProps = {
   note: Note
@@ -23,37 +27,31 @@ export const NoteView = ({ note }: NoteViewProps) => {
   }
 
   return (
-    <>
-      <Row className="align-items-center mb-4">
-        <Col >
-          <h1>{note.title}</h1>
-          {note.tags.length > 0 && (
-            <Stack
-              direction="horizontal"
-              gap={1}
-              className="flex-wrap"
-            >
-              {note.tags.map((tag) => (
-                <Badge key={tag.id} className="text-truncate">
-                  {tag.name}
-                </Badge>
-              ))}
-            </Stack>
-          )}
-        </Col>
-        <Col xs="auto">
-          <Stack direction="horizontal" gap={2}>
-            <Link to={`/notes/${note.id}/edit`}>
-              <Button variant="primary">Edit</Button>
-            </Link>
-            <Button variant="outline-danger" onClick={handleDelete}>Delete</Button>
-            <Link to="..">
-              <Button variant="outline-secondary">Back</Button>
-            </Link>
-          </Stack>
-        </Col>
-      </Row>
-      <ReactMarkdown>{note.markdown}</ReactMarkdown>
-    </>
+    <div className={styles.noteView}>
+      <div className={styles.header}>
+        <div>
+          <h1 className={styles.heading}>{note.title}</h1>
+          <div className={styles.tags}>
+            {note.tags.map((tag) => (
+              <AppBadge key={tag.id} pill={true}>
+                {tag.name}
+              </AppBadge>
+            ))}
+          </div>
+        </div>
+        <div className={styles.actionButtons}>
+          <Link to={`/notes/${note.id}/edit`}>
+            <AppButton>Edit</AppButton>
+          </Link>
+          <AppButton  onClick={handleDelete}>Delete</AppButton>
+          <Link to="..">
+            <AppButton>Back</AppButton>
+          </Link>
+        </div>
+      </div>
+      <div className={styles.body}>
+        <ReactMarkdown>{note.markdown}</ReactMarkdown>
+      </div>
+    </div>
   )
 }
