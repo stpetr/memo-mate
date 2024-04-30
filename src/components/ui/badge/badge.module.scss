@@ -1,0 +1,18 @@
+@use 'theme/helpers' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: rem(4) rem(8);
+  font-size: $fontSizeXs;
+  font-weight: bold;
+  line-height: 1;
+  color: white;
+  background-color: $primary;
+  border-radius: rem(6);
+
+  &.pill {
+    border-radius: rem(50);
+  }
+}
