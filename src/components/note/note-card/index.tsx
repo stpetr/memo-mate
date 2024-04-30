@@ -1,6 +1,8 @@
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
 
+import { Badge } from 'components/ui/badge'
+
 import { Note } from 'types'
 
 import styles from './note-card.module.scss'
@@ -16,9 +18,7 @@ export const NoteCard: FC<NoteCardProps> = ({ note }) => {
       {note.tags.length > 0 && (
         <div className={styles.cardTags}>
           {note.tags.map((tag) => (
-            <span className={styles.cardTag} key={tag.id}>
-                {tag.name}
-              </span>
+            <Badge key={tag.id} pill={false}>{tag.name}</Badge>
           ))}
         </div>
       )}
