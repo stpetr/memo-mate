@@ -1,6 +1,34 @@
 @use 'sass:map';
 @use '../vars/breakpoints' as *;
 
+@mixin container() {
+  width: 100%;
+  padding-right: calc(1.5rem * .5);
+  padding-left: calc(1.5rem * .5);
+  margin-right: auto;
+  margin-left: auto;
+
+  @media (min-width: map.get($breakpoints, md)) {
+    max-width: calc(#{map.get($breakpoints, md)} - 0.75rem);
+  }
+
+  @media (min-width: map.get($breakpoints, md)) {
+    max-width: calc(#{map.get($breakpoints, md)} - 0.75rem);
+  }
+
+  @media (min-width: map.get($breakpoints, lg)) {
+    max-width: calc(#{map.get($breakpoints, lg)} - 0.75rem);
+  }
+
+  @media (min-width: map.get($breakpoints, xl)) {
+    max-width: calc(#{map.get($breakpoints, xl)} - 0.75rem);
+  }
+
+  @media (min-width: map.get($breakpoints, 2xl)) {
+    max-width: calc(#{map.get($breakpoints, 2xl)} - 0.75rem);
+  }
+}
+
 @mixin flexGrid($columnsMap, $gap) {
   display: flex;
   flex-wrap: wrap;
