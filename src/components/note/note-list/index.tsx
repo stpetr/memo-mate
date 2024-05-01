@@ -39,7 +39,6 @@ export const  NoteList = () => {
           <Link to="/notes/new">
             <Button>Create Note</Button>
           </Link>
-          <Button>Edit Tags</Button>
         </div>
       </div>
       <div className={styles.filter}>

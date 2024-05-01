@@ -6,11 +6,22 @@
   min-height: 100vh;
 
   .header {
-    display: flex;
-    padding: 5px;
-    margin-bottom: rem(20);
-    border-bottom: 1px solid;
     background-color: $primary;
+  }
+
+  .header-content {
+    @include container;
+    display: flex;
+    align-items: center;
+    height: rem(60);
+    padding-block: rem(5);
+
+    .logo {
+      font-size: $fontSize4Xl;
+      line-height: 1;
+      color: white;
+      text-decoration: none;
+    }
 
     .profile-nav-wrap {
       position: relative;
@@ -49,10 +60,20 @@
   }
 
   .main-content {
-
+    @include container;
+    padding-block: rem(10);
   }
 
   .footer {
     margin-top: auto;
+    background-color: $primary;
+  }
+
+  .footer-content {
+    @include container;
+    display: flex;
+    align-items: center;
+    height: rem(40);
+    color: white;
   }
 }
