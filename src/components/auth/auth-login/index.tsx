@@ -1,26 +1,15 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { z } from 'zod'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useAuthStore } from 'store/useAuthStore'
 
 import { Input } from 'components/ui/form/input'
 
+import { LoginSchema } from 'entities/auth/types'
+import { loginSchema } from 'entities/auth/schemas'
+
 import styles from './auth-login.module.scss'
-
-const schema = z.object({
-  email: z
-    .string()
-    .min(1,'Email is required')
-    .email('Must be valid email address'),
-  password: z
-    .string()
-    .trim()
-    .min(1, 'Password is required')
-    .min(8, 'Password must have at least 8 characters'),
-})
-
-type FormFields = z.infer<typeof schema>
 
 export const AuthLogin = () => {
   const {
@@ -31,17 +20,13 @@ export const AuthLogin = () => {
       errors,
       isSubmitting,
     },
-  } = useForm<FormFields>({
-    // mode: 'onBlur',
-    defaultValues: {
-      // email: 'petr.sdkb@gmail.com',
-    },
-    resolver: zodResolver(schema),
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
   })
 
   const { signIn } = useAuthStore()
 
-  const onSubmit: SubmitHandler<FormFields> = async ({email, password}) => {
+  const onSubmit: SubmitHandler<LoginSchema> = async ({email, password}) => {
     const res = await signIn({
       email,
       password,
