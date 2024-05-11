@@ -1,11 +1,10 @@
-import axios from 'axios'
 import create from 'zustand'
 import { devtools } from 'zustand/middleware'
 
 import api from 'services/api'
-import { LoginFormData, LoginResponseData, RegisterFormData, User } from 'types'
+import { LoginFormData, LoginResponseData, RegisterFormData, RegisterResponseData, User } from 'types'
 
-import { API_URL, AUTH_TOKEN_KEY } from './constants'
+import { AUTH_TOKEN_KEY } from './constants'
 
 import { StateCreatorWithDevtools } from './types'
 
@@ -16,7 +15,7 @@ interface AuthStore {
   user: User | null
   fetchProfile: () => void
   signIn: (data: LoginFormData) => Promise<LoginResponseData>
-  signUp: (data: RegisterFormData) => void
+  signUp: (data: RegisterFormData) => Promise<RegisterResponseData>
   setUnauthenticated: () => void
 }
 
@@ -71,11 +70,28 @@ const createAuthStore: StateCreatorWithDevtools<AuthStore> = (set) => {
       return result
     },
     signUp: async (data: RegisterFormData) => {
-      // @todo implement register form
-      const res = await axios.post(`${API_URL}/auth/register`, data)
-      if (res.data) {
-        console.log(`You have successfully registered`, res.data)
+      const result = {
+        ok: false,
+        user: undefined,
+        error: undefined
       }
+
+      try {
+        const res = await api.post(`/auth/register`, data)
+
+        if (res?.data) {
+          if (res.data.id) {
+            result.ok = true
+            result.user = res.data
+          } else {
+            result.error = res.data.message
+          }
+        }
+      } catch (error: any) {
+        result.error = error?.data?.message
+      }
+
+      return result
     },
     setUnauthenticated: () => {
       set({

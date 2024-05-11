@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import { Home } from 'pages/home'
 import { Login } from 'pages/login'
+import { Register } from 'pages/register'
 import { NewNote } from 'pages/new-note'
 import { ViewNote } from 'pages/view-note'
 import { EditNote } from 'pages/edit-note'
@@ -25,6 +26,10 @@ export const AppRouter = () => {
           path="/login"
           element={<Login />}
         />
+        <Route
+          path="/register"
+          element={<Register />}
+        />
       </Route>
       <Route
         element={<MainLayout />}
@@ -34,6 +39,7 @@ export const AppRouter = () => {
         >
           <Route index element={<Notes />} />
           <Route path="new" element={<NewNote />} />
+          {/*@todo get rid of NoteLayout*/}
           <Route
             path=":id"
             element={<NoteLayout />}

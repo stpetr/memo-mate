@@ -1,0 +1,61 @@
+@use 'sass:map';
+@use 'theme/helpers' as *;
+
+.layout-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: mediumpurple;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: rem(20);
+  width: 100%;
+}
+
+.heading {
+  text-align: center;
+  color: white;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  padding-inline: rem(35);
+
+  @media (min-width: map.get($breakpoints, md)) {
+    width: rem(600);
+    padding: rem(35);
+    border: 1px solid darken($primary, 8%);
+    border-radius: rem(8);
+  }
+
+  .form-input-error {
+    color: sandybrown;
+  }
+
+  .form-submit-btn {
+    display: flex;
+    height: rem(40);
+    align-items: center;
+    justify-content: center;
+    padding: 0 rem(20);
+    color: mediumpurple;
+    background-color: white;
+    border: none;
+    border-radius: rem(4);
+  }
+}
+
+.bottom {
+  text-align: center;
+  color: white;
+}

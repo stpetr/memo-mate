@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -9,6 +11,7 @@ import { Input } from 'components/ui/form/input'
 import { LoginSchema } from 'entities/auth/types'
 import { loginSchema } from 'entities/auth/schemas'
 
+import layoutStyles from 'components/layouts/auth-layout/auth-layout.module.scss'
 import styles from './auth-login.module.scss'
 
 export const AuthLogin = () => {
@@ -44,14 +47,15 @@ export const AuthLogin = () => {
   }
 
   return (
-    <div className={styles.authLogin}>
-      <form className={styles.authForm} onSubmit={handleSubmit(onSubmit)}>
+    <div className={layoutStyles.pageContainer}>
+      <h1 className={layoutStyles.heading}>Login</h1>
+      <form className={layoutStyles.authForm} onSubmit={handleSubmit(onSubmit)}>
         <div>
           <Input
             register={() => register('email')}
             placeholder="Email"
             error={errors.email?.message}
-            errorClassName={styles.formInputError}
+            errorClassName={layoutStyles.formInputError}
           />
         </div>
 
@@ -61,12 +65,21 @@ export const AuthLogin = () => {
             type="password"
             placeholder="Password"
             error={errors.password?.message}
-            errorClassName={styles.formInputError}
+            errorClassName={layoutStyles.formInputError}
           />
         </div>
-        <button className={styles.formSubmitBtn}>{isSubmitting ? 'Loading...' : 'Submit'}</button>
-        {errors.root && <div className={styles.formInputError}>{errors.root.message}</div>}
+        <button
+          className={layoutStyles.formSubmitBtn}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Loading...' : 'Submit'}
+        </button>
+        {errors.root && <div className={layoutStyles.formInputError}>{errors.root.message}</div>}
       </form>
+
+      <div className={layoutStyles.bottom}>
+        Have no account yet? <Link to="/register" className={styles.registerLink}>Register</Link>
+      </div>
     </div>
   )
 }

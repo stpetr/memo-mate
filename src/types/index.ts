@@ -7,13 +7,6 @@ export type Tag = {
   id: string
 } & TagData
 
-export type NoteData = {
-  id?: string
-  title: string
-  markdown: string
-  tags: Tag[]
-}
-
 export type Note = {
   id?: string
   title: string
@@ -33,7 +26,13 @@ export type LoginResponseData = {
 export type RegisterFormData = {
   email: string
   password: string
-  repeatPassword: string
+  confirmPassword: string
+}
+
+export type RegisterResponseData = {
+  ok: boolean
+  user?: User
+  error?: string | string[]
 }
 
 export type User = {
