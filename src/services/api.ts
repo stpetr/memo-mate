@@ -20,7 +20,9 @@ api.interceptors.response.use((response) => {
 }, (error) => {
   if (error.response?.status === 401) {
     useAuthStore.getState().setUnauthenticated()
+    return null
   }
+  return error.response
 })
 
 export default api
