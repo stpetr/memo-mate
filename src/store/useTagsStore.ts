@@ -1,5 +1,6 @@
-import axios from 'axios'
 import create from 'zustand'
+
+import api from 'services/api'
 
 import { Tag, TagData } from 'types'
 
@@ -15,7 +16,7 @@ export const useTagsStore = create<TagsStore>((set, get) => {
   return {
     tags: [],
     fetchTags: async () => {
-      const res = await axios.get(`${API_URL}/tags`)
+      const res = await api.get(`${API_URL}/tags`)
       if (res.data) {
         set({ tags: res.data })
       } else {
@@ -23,7 +24,7 @@ export const useTagsStore = create<TagsStore>((set, get) => {
       }
     },
     createTag: async (data: TagData) => {
-      const res = await axios.post<Tag>(`${API_URL}/tags`, data)
+      const res = await api.post<Tag>(`${API_URL}/tags`, data)
       if (res.data) {
         set((prevState) => ({
           tags: [...prevState.tags, res.data],
