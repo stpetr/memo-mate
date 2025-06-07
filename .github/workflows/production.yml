@@ -1,4 +1,4 @@
-name: MemoMate Prod
+name: MemoMate
 on:
   push:
     branches: ["master"]
@@ -10,15 +10,24 @@ jobs:
       matrix:
         node-version: [22.x]
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: git fetch origin $GITHUB_REF:$GITHUB_REF -u
-      - run: git checkout $GITHUB_REF -f
-      - run: git pull origin $GITHUB_REF
-      - run: npm ci
-      - run: npm run build
-      - run: rsync -av --checksum --delete --no-times --chown=www-data:www-data --chmod=F775,D775 ./dist/ ${{ secrets.WEB_ROOT_PATH }}
+
+      - name: Generate .env file
+        run: |
+          echo "VITE_API_URL=${{ secrets.API_URL }}" >> .env
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app
+        run: npm run build
+
+      - name: Deploy
+        run: rsync -av --checksum --delete --no-times --chown=www-data:www-data --chmod=F775,D775 ./dist/ ${{ secrets.WEB_ROOT_PATH }}
