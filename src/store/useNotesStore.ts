@@ -1,10 +1,11 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 
 import api from 'services/api'
 
 import { Note } from 'types'
 import { StateCreatorWithDevtools } from 'store/types'
+import { DEVTOOLS_PREFIX } from 'store/constants'
 import { NoteFormData } from 'entities/note/types'
 
 interface NotesStore {
@@ -26,7 +27,7 @@ const createNotesStore: StateCreatorWithDevtools<NotesStore> = (set) => {
         console.error('Failed fetching notes', error)
       }
     },
-    createNote: async (data) => {
+    createNote: async (data: NoteFormData) => {
       try {
         const res = await api.post(`/notes`, data)
         set((prevState) => ({
@@ -38,7 +39,7 @@ const createNotesStore: StateCreatorWithDevtools<NotesStore> = (set) => {
         return null
       }
     },
-    updateNote: async (data) => {
+    updateNote: async (data: NoteFormData) => {
       try {
         const res = await api.patch(`/notes/${data.id}`, data)
         set((prevState) => ({
@@ -55,7 +56,7 @@ const createNotesStore: StateCreatorWithDevtools<NotesStore> = (set) => {
         return null
       }
     },
-    deleteNote: async (id) => {
+    deleteNote: async (id: string) => {
       try {
         const res = await api.delete(`/notes/${id}`)
         set((prevState) => ({
@@ -71,6 +72,6 @@ const createNotesStore: StateCreatorWithDevtools<NotesStore> = (set) => {
 export const useNotesStore = create<NotesStore>()(
   devtools(
     createNotesStore,
-    { name: 'Notes', enabled: true }
+    { name: `${DEVTOOLS_PREFIX} Notes` }
   )
 )

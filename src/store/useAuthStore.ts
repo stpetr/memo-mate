@@ -1,10 +1,10 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 
 import api from 'services/api'
 import { LoginFormData, LoginResponseData, RegisterFormData, RegisterResponseData, User } from 'types'
 
-import { AUTH_TOKEN_KEY } from './constants'
+import { AUTH_TOKEN_KEY, DEVTOOLS_PREFIX } from './constants'
 
 import { StateCreatorWithDevtools } from './types'
 
@@ -27,7 +27,7 @@ const createAuthStore: StateCreatorWithDevtools<AuthStore> = (set) => {
     user: null,
     fetchProfile: async () => {
       try {
-        set({ isLoading: true })
+        set({ isLoading: true }, false, 'fetchProfile.loading')
         const res = await api.get('/auth/profile')
         set(
           {
@@ -37,12 +37,12 @@ const createAuthStore: StateCreatorWithDevtools<AuthStore> = (set) => {
             }
           },
           false,
-          'fetchProfile'
+          'fetchProfile.success'
         )
       } catch (error) {
 
       } finally {
-        set({ isLoading: false, isMounted: true })
+        set({ isLoading: false, isMounted: true }, false, 'fetchProfile.complete')
       }
     },
     signIn: async (data: LoginFormData) => {
@@ -59,7 +59,7 @@ const createAuthStore: StateCreatorWithDevtools<AuthStore> = (set) => {
               user: res.data.user,
             },
             false,
-            'signIn',
+            'signIn.success'
           )
           localStorage.setItem(AUTH_TOKEN_KEY, res.data.access_token)
         }
@@ -106,6 +106,6 @@ const createAuthStore: StateCreatorWithDevtools<AuthStore> = (set) => {
 export const useAuthStore = create<AuthStore>()(
   devtools(
     createAuthStore,
-    { name: 'Auth', enabled: true },
+    { name: `${DEVTOOLS_PREFIX} Auth`}
   )
 )
